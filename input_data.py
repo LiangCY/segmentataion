@@ -105,9 +105,9 @@ def get_data_from_case(image_path, mask_path, start_index, end_index):
 
 def get_train_data():
     (images_005, labels_005) = get_data_from_case('E:\MachineLearning\segmentation\case_005.tif',
-                                                  'E:\MachineLearning\segmentation\mask_005.mat', 80, 105)
+                                                  'E:\MachineLearning\segmentation\case_005_mask.mat', 80, 105)
     (images_027, labels_027) = get_data_from_case('E:\MachineLearning\segmentation\case_027.tif',
-                                                  'E:\MachineLearning\segmentation\mask_027.mat', 99, 109)
+                                                  'E:\MachineLearning\segmentation\case_027_mask.mat', 90, 110)
     (images_028, labels_028) = get_data_from_case('E:\MachineLearning\segmentation\case_028.tif',
                                                   'E:\MachineLearning\segmentation\mask_028.mat', 57, 61)
     images = numpy.concatenate((images_005, images_027, images_028), axis=0)
