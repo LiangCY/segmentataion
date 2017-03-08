@@ -10,7 +10,7 @@ import input_data
 
 FLAGS = None
 
-IMAGE_SIZE = 108
+IMAGE_SIZE = 128
 
 
 def train():

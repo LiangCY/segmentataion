@@ -12,13 +12,13 @@ import input_data
 
 FLAGS = None
 
-CONV1_WEIGHT_SHAPE = [5, 5, 1, 36]
+CONV1_WEIGHT_SHAPE = [7, 7, 1, 36]
 CONV1_BIAS_SHAPE = [36]
-CONV2_WEIGHT_SHAPE = [5, 5, 36, 36]
+CONV2_WEIGHT_SHAPE = [6, 6, 36, 36]
 CONV2_BIAS_SHAPE = [36]
 CONV3_WEIGHT_SHAPE = [5, 5, 36, 64]
 CONV3_BIAS_SHAPE = [64]
-LOCAL4_INPUT_SIZE = 5 * 5 * 64
+LOCAL4_INPUT_SIZE = 8 * 8 * 64
 LOCAL4_OUTPUT_SIZE = 256
 
 
@@ -67,7 +67,7 @@ def inference(images, keep_prob):
 
     # pool3
     with tf.name_scope('pool3'):
-        pool3 = tf.nn.max_pool(conv3, ksize=[1, 4, 4, 1], strides=[1, 4, 4, 1], padding='VALID', name='pool3')
+        pool3 = tf.nn.max_pool(conv3, ksize=[1, 3, 3, 1], strides=[1, 3, 3, 1], padding='VALID', name='pool3')
 
     # local4
     with tf.variable_scope('local4') as scope:

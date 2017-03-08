@@ -3,7 +3,7 @@ import numpy
 import random
 import scipy.io
 
-IMAGE_SIZE = 108
+IMAGE_SIZE = 128
 CROP_SIZE = IMAGE_SIZE / 2
 
 
