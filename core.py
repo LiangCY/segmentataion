@@ -67,7 +67,7 @@ def inference(images, keep_prob):
 
     # pool3
     with tf.name_scope('pool3'):
-        pool3 = tf.nn.max_pool(conv3, ksize=[1, 4, 4, 1], strides=[1, 3, 3, 1], padding='VALID', name='pool3')
+        pool3 = tf.nn.max_pool(conv3, ksize=[1, 4, 4, 1], strides=[1, 4, 4, 1], padding='VALID', name='pool3')
 
     # local4
     with tf.variable_scope('local4') as scope:
