@@ -10,15 +10,17 @@ import input_data
 
 FLAGS = None
 
+IMAGE_SIZE = 108
+
 
 def train():
     start_time = time.time()
     with tf.Graph().as_default():
         with tf.name_scope('input'):
-            x = tf.placeholder(tf.float32, [None, 128 * 128], name='x-input')
+            x = tf.placeholder(tf.float32, [None, IMAGE_SIZE * IMAGE_SIZE], name='x-input')
             y_ = tf.placeholder(tf.float32, [None, 4], name='y-input')
         with tf.name_scope('input_reshape'):
-            image_shaped_input = tf.reshape(x, [-1, 128, 128, 1])
+            image_shaped_input = tf.reshape(x, [-1, IMAGE_SIZE, IMAGE_SIZE, 1])
             tf.summary.image('input', image_shaped_input, 10)
         with tf.name_scope('dropout_keep_prob'):
             keep_prob = tf.placeholder(tf.float32)

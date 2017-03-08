@@ -13,12 +13,15 @@ tf.app.flags.DEFINE_string('checkpoint_dir', 'E://MachineLearning/segmentation/c
 tf.app.flags.DEFINE_string('output_dir', 'E://MachineLearning/segmentation/code/out',
                            """Directory where to save segmented images.""")
 
+IMAGE_SIZE = 108
+CROP_SIZE = IMAGE_SIZE / 2
+
 
 def segment_image(image_path, image_index):
     start_time = time.time()
     with tf.Session() as sess:
-        x = tf.placeholder("float", [None, 128 * 128])
-        x_image = tf.reshape(x, [-1, 128, 128, 1])
+        x = tf.placeholder("float", [None, IMAGE_SIZE * IMAGE_SIZE])
+        x_image = tf.reshape(x, [-1, IMAGE_SIZE, IMAGE_SIZE, 1])
         y_conv = tf.nn.softmax(core.inference(x_image, keep_prob=1.0))
         prediction = tf.argmax(y_conv, 1)
 
@@ -33,9 +36,9 @@ def segment_image(image_path, image_index):
             result = numpy.zeros((height, width))
             for i in range(0, height):
                 for j in range(0, width):
-                    box = (j - 64, i - 64, j + 64, i + 64)
+                    box = (j - CROP_SIZE, i - CROP_SIZE, j + CROP_SIZE, i + CROP_SIZE)
                     image = numpy.array(original_img.crop(box))
-                    image = numpy.reshape(image, (1, 128 * 128))
+                    image = numpy.reshape(image, (1, IMAGE_SIZE * IMAGE_SIZE))
                     image = image.astype(numpy.float32)
                     image = numpy.multiply(image, 1.0 / 255.0)
                     y_pred = prediction.eval(feed_dict={x: image})

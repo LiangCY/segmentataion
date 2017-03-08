@@ -12,6 +12,15 @@ import input_data
 
 FLAGS = None
 
+CONV1_WEIGHT_SHAPE = [5, 5, 1, 36]
+CONV1_BIAS_SHAPE = [36]
+CONV2_WEIGHT_SHAPE = [5, 5, 36, 36]
+CONV2_BIAS_SHAPE = [36]
+CONV3_WEIGHT_SHAPE = [5, 5, 36, 64]
+CONV3_BIAS_SHAPE = [64]
+LOCAL4_INPUT_SIZE = 5 * 5 * 64
+LOCAL4_OUTPUT_SIZE = 256
+
 
 def weight_variable(shape):
     initial = tf.truncated_normal(shape, stddev=0.1)
@@ -26,9 +35,9 @@ def bias_variable(shape):
 def inference(images, keep_prob):
     # conv1
     with tf.variable_scope('conv1') as scope:
-        kernel = weight_variable([7, 7, 1, 36])
+        kernel = weight_variable(CONV1_WEIGHT_SHAPE)
         conv = tf.nn.conv2d(images, kernel, [1, 1, 1, 1], padding='VALID')
-        biases = bias_variable([36])
+        biases = bias_variable(CONV1_BIAS_SHAPE)
         pre_activation = tf.nn.bias_add(conv, biases)
         conv1 = tf.nn.relu(pre_activation, name=scope.name)
 
@@ -38,9 +47,9 @@ def inference(images, keep_prob):
 
     # conv2
     with tf.variable_scope('conv2') as scope:
-        kernel = weight_variable([6, 6, 36, 36])
+        kernel = weight_variable(CONV2_WEIGHT_SHAPE)
         conv = tf.nn.conv2d(pool1, kernel, [1, 1, 1, 1], padding='VALID')
-        biases = bias_variable([36])
+        biases = bias_variable(CONV2_BIAS_SHAPE)
         pre_activation = tf.nn.bias_add(conv, biases)
         conv2 = tf.nn.relu(pre_activation, name=scope.name)
 
@@ -50,21 +59,21 @@ def inference(images, keep_prob):
 
     # conv3
     with tf.variable_scope('conv3') as scope:
-        kernel = weight_variable([5, 5, 36, 64])
+        kernel = weight_variable(CONV3_WEIGHT_SHAPE)
         conv = tf.nn.conv2d(pool2, kernel, [1, 1, 1, 1], padding='VALID')
-        biases = bias_variable([64])
+        biases = bias_variable(CONV3_BIAS_SHAPE)
         pre_activation = tf.nn.bias_add(conv, biases)
         conv3 = tf.nn.relu(pre_activation, name=scope.name)
 
     # pool3
     with tf.name_scope('pool3'):
-        pool3 = tf.nn.max_pool(conv3, ksize=[1, 3, 3, 1], strides=[1, 3, 3, 1], padding='VALID', name='pool3')
+        pool3 = tf.nn.max_pool(conv3, ksize=[1, 4, 4, 1], strides=[1, 3, 3, 1], padding='VALID', name='pool3')
 
     # local4
     with tf.variable_scope('local4') as scope:
-        reshape = tf.reshape(pool3, [-1, 8 * 8 * 64])
-        weights = weight_variable([8 * 8 * 64, 128])
-        biases = bias_variable([128])
+        reshape = tf.reshape(pool3, [-1, LOCAL4_INPUT_SIZE])
+        weights = weight_variable([LOCAL4_INPUT_SIZE, LOCAL4_OUTPUT_SIZE])
+        biases = bias_variable([LOCAL4_OUTPUT_SIZE])
         local4 = tf.nn.relu(tf.matmul(reshape, weights) + biases, name=scope.name)
 
     # dropout
@@ -73,7 +82,7 @@ def inference(images, keep_prob):
 
     # linear layer
     with tf.variable_scope('softmax_linear') as scope:
-        weights = weight_variable([128, 4])
+        weights = weight_variable([LOCAL4_OUTPUT_SIZE, 4])
         biases = bias_variable([4])
         softmax_linear = tf.add(tf.matmul(dropped, weights), biases, name=scope.name)
     return softmax_linear
