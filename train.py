@@ -34,7 +34,7 @@ def train():
         sess = tf.Session()
         summary_writer = tf.summary.FileWriter(FLAGS.log_dir, sess.graph)
         sess.run(init)
-        for i in range(25):
+        for i in range(20):
             images, labels = input_data.get_train_data()
             image_num, _ = images.shape
             batch_num = int(image_num / 100)
