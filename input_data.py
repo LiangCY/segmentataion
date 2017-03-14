@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageFilter
 import numpy
 import random
 import scipy.io
@@ -17,6 +17,7 @@ def get_data_from_case(image_path, mask_path, start_index, end_index):
     for i in range(start_index, end_index):
 
         ori_img.seek(i)
+        x_img = ori_img.filter(ImageFilter.EDGE_ENHANCE)
         seg_slice = mask[:, :, i]
 
         batch_x = numpy.zeros((0, IMAGE_SIZE, IMAGE_SIZE))
@@ -35,7 +36,7 @@ def get_data_from_case(image_path, mask_path, start_index, end_index):
                 x = f_random_x[j]
                 y = f_random_y[j]
                 box = (y - CROP_SIZE, x - CROP_SIZE, y + CROP_SIZE, x + CROP_SIZE)
-                batch_f_x[j, :, :] = numpy.array(ori_img.crop(box))
+                batch_f_x[j, :, :] = numpy.array(x_img.crop(box))
                 batch_f_y[j, 0] = 1
             batch_x = numpy.concatenate((batch_x, batch_f_x))
             batch_y = numpy.concatenate((batch_y, batch_f_y))
@@ -53,7 +54,7 @@ def get_data_from_case(image_path, mask_path, start_index, end_index):
                 x = m_random_x[j]
                 y = m_random_y[j]
                 box = (y - CROP_SIZE, x - CROP_SIZE, y + CROP_SIZE, x + CROP_SIZE)
-                batch_m_x[j, :, :] = numpy.array(ori_img.crop(box))
+                batch_m_x[j, :, :] = numpy.array(x_img.crop(box))
                 batch_m_y[j, 1] = 1
             batch_x = numpy.concatenate((batch_x, batch_m_x))
             batch_y = numpy.concatenate((batch_y, batch_m_y))
@@ -71,7 +72,7 @@ def get_data_from_case(image_path, mask_path, start_index, end_index):
                 x = s_random_x[j]
                 y = s_random_y[j]
                 box = (y - CROP_SIZE, x - CROP_SIZE, y + CROP_SIZE, x + CROP_SIZE)
-                batch_s_x[j, :, :] = numpy.array(ori_img.crop(box))
+                batch_s_x[j, :, :] = numpy.array(x_img.crop(box))
                 batch_s_y[j, 2] = 1
             batch_x = numpy.concatenate((batch_x, batch_s_x))
             batch_y = numpy.concatenate((batch_y, batch_s_y))
@@ -89,7 +90,7 @@ def get_data_from_case(image_path, mask_path, start_index, end_index):
                 x = n_random_x[j]
                 y = n_random_y[j]
                 box = (y - CROP_SIZE, x - CROP_SIZE, y + CROP_SIZE, x + CROP_SIZE)
-                batch_n_x[j, :, :] = numpy.array(ori_img.crop(box))
+                batch_n_x[j, :, :] = numpy.array(x_img.crop(box))
                 batch_n_y[j, 3] = 1
             batch_x = numpy.concatenate((batch_x, batch_n_x))
             batch_y = numpy.concatenate((batch_y, batch_n_y))
