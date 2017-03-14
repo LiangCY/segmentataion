@@ -15,6 +15,7 @@ IMAGE_SIZE = 128
 
 def train():
     start_time = time.time()
+    checkpoint_file = os.path.join(FLAGS.log_dir, 'model.ckpt')
     with tf.Graph().as_default():
         with tf.name_scope('input'):
             x = tf.placeholder(tf.float32, [None, IMAGE_SIZE * IMAGE_SIZE], name='x-input')
@@ -54,8 +55,8 @@ def train():
                     summary_str, loss_value, _ = sess.run([summary, loss, train_op], feed_dict=feed_dict)
                     summary_writer.add_summary(summary_str, step)
                 if (step + 1) % 1000 == 0:
-                    checkpoint_file = os.path.join(FLAGS.log_dir, 'model.ckpt')
                     saver.save(sess, checkpoint_file, global_step=step)
+        saver.save(sess, checkpoint_file)
         duration = time.time() - start_time
         print('%d seconds' % int(duration))
 
