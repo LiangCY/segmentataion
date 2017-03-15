@@ -45,7 +45,7 @@ def train():
                 index = random_index[j]
                 xs = images[index * 100: (index + 1) * 100]
                 ys = labels[index * 100: (index + 1) * 100]
-                if step % 20 == 0:
+                if step % 50 == 0:
                     feed_dict = {x: xs, y_: ys, keep_prob: 1.0}
                     summary_str, acc = sess.run([summary, accuracy], feed_dict=feed_dict)
                     summary_writer.add_summary(summary_str, step)
