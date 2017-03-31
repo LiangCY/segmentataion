@@ -10,7 +10,7 @@ import input_data
 
 FLAGS = None
 
-IMAGE_SIZE = 128
+IMAGE_SIZE = 96
 
 
 def train():
@@ -36,7 +36,7 @@ def train():
         summary_writer = tf.summary.FileWriter(FLAGS.log_dir, sess.graph)
         sess.run(init)
         for i in range(20):
-            images, labels = input_data.get_train_data()
+            images, labels = input_data.get_train_data(i)
             image_num, _ = images.shape
             batch_num = int(image_num / 100)
             random_index = random.sample(range(batch_num), batch_num)

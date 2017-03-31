@@ -13,7 +13,7 @@ tf.app.flags.DEFINE_string('checkpoint_dir', 'E://MachineLearning/segmentation/c
 tf.app.flags.DEFINE_string('output_dir', 'E://MachineLearning/segmentation/code/out',
                            """Directory where to save segmented images.""")
 
-IMAGE_SIZE = 128
+IMAGE_SIZE = 96
 CROP_SIZE = IMAGE_SIZE / 2
 
 
