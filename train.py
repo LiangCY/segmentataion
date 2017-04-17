@@ -3,6 +3,7 @@ import os.path
 import sys
 import tensorflow as tf
 import random
+import numpy
 import time
 
 import core
@@ -10,12 +11,13 @@ import input_data
 
 FLAGS = None
 
-IMAGE_SIZE = 96
+IMAGE_SIZE = 128
 
 
 def train():
     start_time = time.time()
     checkpoint_file = os.path.join(FLAGS.log_dir, 'model.ckpt')
+
     with tf.Graph().as_default():
         with tf.name_scope('input'):
             x = tf.placeholder(tf.float32, [None, IMAGE_SIZE * IMAGE_SIZE], name='x-input')
@@ -36,7 +38,8 @@ def train():
         summary_writer = tf.summary.FileWriter(FLAGS.log_dir, sess.graph)
         sess.run(init)
         for i in range(20):
-            images, labels = input_data.get_train_data(i)
+            images, labels = input_data.get_train_data()
+
             image_num, _ = images.shape
             batch_num = int(image_num / 100)
             random_index = random.sample(range(batch_num), batch_num)
