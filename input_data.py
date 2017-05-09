@@ -133,7 +133,3 @@ def get_test_data():
     images = numpy.multiply(images, 1.0 / 255.0)
     labels = labels.astype(numpy.float32)
     return images, labels
-
-
-(images, labels) = get_data_from_case('E:\MachineLearning\segmentation\case_005.tif',
-                                      'E:\MachineLearning\segmentation\mask_005.mat', 79, 107)
